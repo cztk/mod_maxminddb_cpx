@@ -74,6 +74,7 @@ static void *create_srv_config(apr_pool_t *pool, server_rec *s);
 static void *create_config(apr_pool_t *pool);
 static apr_status_t cleanup_database(void *mmdb);
 static char *from_uint128(apr_pool_t *pool, const MMDB_entry_data_s *result);
+static bool get_client_ip_from_query_string(request_rec *r, char *querystring);
 static char *get_client_ip(request_rec *r);
 static void maxminddb_register_hooks(apr_pool_t *UNUSED(p));
 static void *merge_config(apr_pool_t *pool, void *parent, void *child);
@@ -383,7 +384,9 @@ static int export_env(request_rec *r, maxminddb_config *conf) {
     if (!conf || conf->enabled != 1) {
         return DECLINED;
     }
-    char *ip_address = get_client_ip(r);
+    //char *ip_address = get_client_ip(r);
+    char *ip_address = apr_palloc(r->pool, 201);
+    if(!get_client_ip_from_query_string(r, ip_address)) ip_address = get_client_ip(r);
     INFO(r->server, "maxminddb_header_parser %s", ip_address);
     if (NULL == ip_address) {
         return DECLINED;
@@ -402,6 +405,28 @@ static int export_env(request_rec *r, maxminddb_config *conf) {
     }
 
     return OK;
+}
+
+static bool get_client_ip_from_query_string(request_rec *r, char*querystring) {
+    if(NULL != r->args) {
+        char needle[] = "ip_user=";
+        char *p = strstr(r->args, needle);
+        if( NULL != p ) {
+            p += 8;
+            int i = 0;
+            while((p != NULL && *p != '\0' && *p != '&' && *p != '?' && *p != '\\') || i > 199) {
+                querystring[i] = *p;
+                p++;
+                i++;
+                querystring[i] = '\0';
+            }
+            if( i > 3 ) {
+//              ERROR(r->server, "iRead IP address OK %s", querystring);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 static char *get_client_ip(request_rec *r) {
@@ -437,7 +462,7 @@ static void export_env_for_database(request_rec *r,
     int const gai_status = getaddrinfo(ip_address, NULL, &hints, &addresses);
     if (gai_status != 0) {
         ERROR(r->server,
-              "Error resolving IP address: %s",
+              "Error resolving IP address (%s): %s",ip_address,
               gai_strerror(gai_status));
         return;
     }
