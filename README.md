@@ -143,6 +143,14 @@ environment variables set via `MaxMindDBEnv`. Valid settings are `On` and `Off`.
 It defaults to `Off`.
 
     MaxMindDBSetNotes On
+    
+### `MaxMindDBQueryStringParam` ###
+
+This directive defines params to scan for IPs within the query string.
+
+        MaxMindDBQueryStringParam PARAM GET
+        
+Would enable additional variable PARAM to be searched for ( http://.../?PARAM=<ip> )
 
 ## Exported Environment Variables ##
 
