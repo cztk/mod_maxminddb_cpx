@@ -18,6 +18,7 @@
  * limitations under the License.
  *
  */
+
 #include <ap_config.h>
 #include <apr_hash.h>
 #include <apr_strings.h>
@@ -31,10 +32,11 @@
 #include <maxminddb.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+
 #ifdef APLOG_USE_MODULE
 APLOG_USE_MODULE(maxminddb);
 #endif
-#define MAXMINDDB_DEBUG 1
+#define _MAXMINDDB_DEBUG 1
 #if defined(MAXMINDDB_DEBUG)
 #define INFO(server_rec, ...)                                                  \
     ap_log_error(APLOG_MARK,                                                   \
@@ -45,6 +47,7 @@ APLOG_USE_MODULE(maxminddb);
 #else
 #define INFO(server_rec, ...)
 #endif
+
 #define ERROR(server_rec, ...)                                                 \
     ap_log_error(                                                              \
         APLOG_MARK, APLOG_ERR, 0, server_rec, "[mod_maxminddb]: " __VA_ARGS__)
@@ -55,6 +58,7 @@ APLOG_USE_MODULE(maxminddb);
 #else
 #define UNUSED
 #endif
+
 typedef struct maxminddb_config {
     apr_hash_t *databases;
     apr_hash_t *lookups;
@@ -221,6 +225,7 @@ static void *create_config(apr_pool_t *pool) {
     conf->enabled = -1;
 
     conf->set_notes = 0; /* by default, don't set notes */
+
     return conf;
 }
 
@@ -488,6 +493,31 @@ static char *get_client_ip(request_rec *r) {
 #endif
 }
 
+char *url_decode(const char *input)
+{
+	int input_length = strlen(input);
+
+	size_t output_length = (input_length + 1) * sizeof(char);
+	char *working = malloc(output_length), *output = working;
+	
+	while(*input)
+	{
+		if(*input == '%')
+		{
+			char buffer[3] = { input[1], input[2], 0 };
+			*working++ = strtol(buffer, NULL, 16);
+			input += 3;
+		}
+		else
+		{
+			*working++ = *input++;
+		}
+	}
+
+	*working = 0; //null terminate
+	return output;
+}
+
 static bool get_client_ip_from_query_string(request_rec *r, const char *query_param_name, char *querystring) {
     if(NULL != r->args) {
         if(query_param_name) {
@@ -504,9 +534,18 @@ static bool get_client_ip_from_query_string(request_rec *r, const char *query_pa
                 if( NULL != p ) {
                     p += query_param_needle_len;
                     int i = 0;
-                    while((p != NULL && *p != '\0' && *p != '&' && *p != '?' && *p != '\\') || i > 2046) {
-                        querystring[i] = *p;
-                        p++;
+                    int j = 0;
+                    while((p != NULL && *p != '\0' && *p != '&' && *p != '?' && *p != '\\') || i > 2046 && j <= args_len) {
+                        if(*p == '%' && i+3 < args_len) {
+                            char buffer[3] = { p[1], p[2], 0 };
+                            querystring[i] = strtol(buffer, NULL, 16);
+                            p += 3;
+                            j += 3;
+                        } else {
+                            querystring[i] = *p;
+                            p++;
+                            j++;
+                        }
                         i++;
                         querystring[i] = '\0';
                     }
