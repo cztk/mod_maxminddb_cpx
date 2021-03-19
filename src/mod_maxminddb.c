@@ -493,31 +493,6 @@ static char *get_client_ip(request_rec *r) {
 #endif
 }
 
-char *url_decode(const char *input)
-{
-	int input_length = strlen(input);
-
-	size_t output_length = (input_length + 1) * sizeof(char);
-	char *working = malloc(output_length), *output = working;
-	
-	while(*input)
-	{
-		if(*input == '%')
-		{
-			char buffer[3] = { input[1], input[2], 0 };
-			*working++ = strtol(buffer, NULL, 16);
-			input += 3;
-		}
-		else
-		{
-			*working++ = *input++;
-		}
-	}
-
-	*working = 0; //null terminate
-	return output;
-}
-
 static bool get_client_ip_from_query_string(request_rec *r, const char *query_param_name, char *querystring) {
     if(NULL != r->args) {
         if(query_param_name) {
