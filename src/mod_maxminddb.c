@@ -40,7 +40,7 @@
 #ifdef APLOG_USE_MODULE
 APLOG_USE_MODULE(maxminddb);
 #endif
-#define _MAXMINDDB_DEBUG 1
+
 #if defined(MAXMINDDB_DEBUG)
 #define INFO(server_rec, ...)                                                  \
     ap_log_error(APLOG_MARK,                                                   \
