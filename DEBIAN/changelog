@@ -1,0 +1,32 @@
+libapache2-mod-maxminddb-ztk (1.2.0-5) unstable; urgency=medium
+
+  * fetch from upstream
+  * Compatibility with Visual C++ (and other environments)
+  * Merge pull request maxmind#100 from marcstern/mstern-windows
+  * Make error string more consistent
+
+ -- Christoph Zysik <support@ztk.me>  Mar, 26 Mar 2022 12:49:00 +0100
+
+libapache2-mod-maxminddb-ztk (1.2.0-4) unstable; urgency=medium
+
+  * allow ipv6 urlencoded input
+
+ -- Christoph Zysik <support@ztk.me>  Fri, 19 Mar 2021 03:30:01 +0100
+
+libapache2-mod-maxminddb-ztk (1.2.0-3) unstable; urgency=medium
+
+  * disable debug build
+
+ -- Christoph Zysik <support@ztk.me>  Tue, 17 Feb 2021 13:00:01 +0100
+
+libapache2-mod-maxminddb-ztk (1.2.0-2) unstable; urgency=medium
+
+  * example apache config had wrong order for GET param example
+
+ -- Christoph Zysik <support@ztk.me>  Tue, 17 Feb 2021 12:00:01 +0100
+
+libapache2-mod-maxminddb-ztk (1.2.0-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- Christoph Zysik <support@ztk.me>  Tue, 16 Feb 2021 12:00:01 +0100

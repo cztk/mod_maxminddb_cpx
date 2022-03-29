@@ -1,0 +1,8 @@
+libapache2-mod-maxminddb-ztk for Ubuntu
+-----------------------------------
+
+This package requires non-free MaxMind database files.
+This is a modified version of the upstream maxminddb-mod -
+if you are unsure, do not use this package.
+
+ -- Christoph Zysik <support@ztk.me>  TUE, 16 Feb 2021 12:00:01 +0100
