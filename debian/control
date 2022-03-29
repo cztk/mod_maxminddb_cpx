@@ -1,20 +1,18 @@
-Maintainer: Christoph Zysik <support@ztk.me>
+Source: libapache2-mod-maxminddb-ztk
+Standards-Version: 4.5.1
 Section: httpd
 Priority: optional
-
-Package: libapache2-mod-maxminddb-ztk
-Standards-Version: 4.5.1
-Homepage: https://github.com/cztk/mod_maxminddb_ztk
-Version: 0:1.2.0-5
-Architecture: amd64
 Build-Depends: debhelper (>= 10),
                apache2-dev,
                dh-apache2,
                libapr1-dev,
                libmaxminddb-dev
+Maintainer: Christoph Zysik <support@ztk.me>
+
+Package: libapache2-mod-maxminddb-ztk
+Homepage: https://github.com/cztk/mod_maxminddb_ztk
+Architecture: amd64
 Depends: apache2, libmaxminddb0, libapr1
-Recommends:
 Description: Provides IP2Country feature for apache
   Provides IP2Country feature for apache modified to support
   multiple sources of IPs from query string.
-Distribution: focal
