@@ -5,7 +5,7 @@ libapache2-mod-maxminddb-ztk (1.2.0-5) unstable; urgency=medium
   * Merge pull request maxmind#100 from marcstern/mstern-windows
   * Make error string more consistent
 
- -- Christoph Zysik <support@ztk.me>  Mar, 26 Mar 2022 12:49:00 +0100
+ -- Christoph Zysik <support@ztk.me>  Sat, 26 Mar 2022 12:49:00 +0100
 
 libapache2-mod-maxminddb-ztk (1.2.0-4) unstable; urgency=medium
 
