@@ -16,9 +16,10 @@ jobs:
       # (the detect_leaks setting).
       ASAN_OPTIONS: detect_leaks=0:strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:detect_invalid_pointer_pairs=2
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
+      - run: sudo apt update
       - run: sudo apt install --assume-yes libmaxminddb-dev apache2-bin apache2 libapache2-mod-perl2 libtool libpcre3-dev libapache2-mod-security2 libjson-xs-perl cpanminus apache2-dev
       - run: sudo mkdir /etc/apache2/logs
       - run: ./bootstrap
